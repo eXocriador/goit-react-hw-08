@@ -6,7 +6,6 @@ import Filter from "../../components/Filter/Filter";
 import { fetchContacts } from "../../redux/contacts/operations";
 import { selectIsLoggedIn } from "../../redux/auth/selectors";
 import Modal from "../../components/Modal/Modal";
-import styles from "./ContactsPage.module.css";
 
 const ContactsPage = () => {
   const dispatch = useDispatch();
@@ -21,6 +20,11 @@ const ContactsPage = () => {
 
   return (
     <div>
+      <h2>Your Contacts</h2>
+      <ContactForm /> {/* ✅ ДОДАНО — завжди показується для створення */}
+      <Filter />
+      <ContactList onEdit={setEditingContact} />
+      {/* ✅ Модалка для редагування */}
       <Modal
         show={!!editingContact}
         title="Edit Contact"
@@ -28,22 +32,6 @@ const ContactsPage = () => {
       >
         <ContactForm editing={editingContact} setEditing={setEditingContact} />
       </Modal>
-      <h2>Your Contacts</h2>
-      <Filter />
-      <ContactList onEdit={setEditingContact} />
-
-      {editingContact && (
-        <div className={styles.backdrop}>
-          <div className={styles.modal}>
-            <h3>Edit Contact</h3>
-            <ContactForm
-              editing={editingContact}
-              setEditing={setEditingContact}
-            />
-            <button onClick={() => setEditingContact(null)}>Close</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

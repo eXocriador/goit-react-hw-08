@@ -1,27 +1,29 @@
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { addContact } from "../../redux/contacts/operations";
+import { addContact, updateContact } from "../../redux/contacts/operations";
 import { selectContacts } from "../../redux/contacts/selectors";
 import { toast } from "react-hot-toast";
 
-const ContactForm = () => {
+const ContactForm = ({ editing = null, setEditing = () => {} }) => {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
 
   const validationSchema = Yup.object({
     name: Yup.string().min(2, "Too short").required("Required"),
     number: Yup.string()
-      .matches(/^[+]?\d[\d\s-]*\d$/, "Invalid phone number")
+      .matches(/^[+]?[\d\s-]*\d$/, "Invalid phone number")
       .required("Required"),
   });
 
   const handleSubmit = (values, { resetForm, setSubmitting }) => {
-    const nameExists = contacts.some(
-      (contact) => contact.name.toLowerCase() === values.name.toLowerCase()
+    const isDuplicate = contacts.some(
+      (contact) =>
+        contact.name.toLowerCase() === values.name.toLowerCase() &&
+        (!editing || contact.id !== editing.id)
     );
 
-    if (nameExists) {
+    if (isDuplicate) {
       toast.error(`${values.name} is already in contacts`, {
         position: "top-right",
       });
@@ -29,22 +31,39 @@ const ContactForm = () => {
       return;
     }
 
-    dispatch(addContact(values))
-      .unwrap()
-      .then(() =>
-        toast.success(`${values.name} added`, { position: "top-right" })
-      )
-      .catch(() =>
-        toast.error("Failed to add contact", { position: "top-right" })
-      );
+    const action = editing
+      ? updateContact({ id: editing.id, ...values })
+      : addContact(values);
 
-    resetForm();
+    dispatch(action)
+      .unwrap()
+      .then(() => {
+        toast.success(
+          editing
+            ? `${values.name} updated successfully`
+            : `${values.name} added`,
+          { position: "top-right" }
+        );
+        resetForm();
+        setEditing(null);
+      })
+      .catch(() => {
+        toast.error(
+          editing ? "Failed to update contact" : "Failed to add contact",
+          { position: "top-right" }
+        );
+      });
+
     setSubmitting(false);
   };
 
   return (
     <Formik
-      initialValues={{ name: "", number: "" }}
+      enableReinitialize
+      initialValues={{
+        name: editing?.name || "",
+        number: editing?.number || "",
+      }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
       validateOnChange={false}
@@ -68,7 +87,9 @@ const ContactForm = () => {
         <label>Number</label>
         <Field name="number" placeholder="+123456789" />
 
-        <button type="submit">Add Contact</button>
+        <button type="submit">
+          {editing ? "Update Contact" : "Add Contact"}
+        </button>
       </Form>
     </Formik>
   );
