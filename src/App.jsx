@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Toaster } from "react-hot-toast";
 import Layout from "./layout/Layout";
 import HomePage from "./pages/HomePage/HomePage";
 import ContactsPage from "./pages/ContactsPage/ContactsPage";
@@ -19,38 +20,43 @@ const App = () => {
     dispatch(refreshUser());
   }, [dispatch]);
 
-  return isRefreshing ? (
-    <p>Refreshing user...</p>
-  ) : (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route
-          path="/register"
-          element={
-            <RestrictedRoute>
-              <RegistrationPage />
-            </RestrictedRoute>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <RestrictedRoute>
-              <LoginPage />
-            </RestrictedRoute>
-          }
-        />
-        <Route
-          path="/contacts"
-          element={
-            <PrivateRoute>
-              <ContactsPage />
-            </PrivateRoute>
-          }
-        />
-      </Route>
-    </Routes>
+  return (
+    <>
+      <Toaster position="top-right" />
+      {isRefreshing ? (
+        <p>Refreshing user...</p>
+      ) : (
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route
+              path="/register"
+              element={
+                <RestrictedRoute>
+                  <RegistrationPage />
+                </RestrictedRoute>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <RestrictedRoute>
+                  <LoginPage />
+                </RestrictedRoute>
+              }
+            />
+            <Route
+              path="/contacts"
+              element={
+                <PrivateRoute>
+                  <ContactsPage />
+                </PrivateRoute>
+              }
+            />
+          </Route>
+        </Routes>
+      )}
+    </>
   );
 };
 

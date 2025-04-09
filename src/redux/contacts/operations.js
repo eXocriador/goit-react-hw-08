@@ -1,4 +1,3 @@
-// operations.js — з обробкою токена для fetchContacts
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -18,7 +17,7 @@ export const fetchContacts = createAsyncThunk('contacts/fetchAll', async (_, thu
     const token = state.auth.token;
     if (!token) return thunkAPI.rejectWithValue('No token');
 
-    setAuthHeader(token); 
+    setAuthHeader(token);
     const response = await axios.get('/contacts');
     return response.data;
   } catch (e) {
