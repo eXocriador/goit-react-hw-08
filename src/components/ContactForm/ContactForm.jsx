@@ -9,7 +9,7 @@ const ContactForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addContact({ name, phone }));
+    dispatch(addContact({ name, number: phone }));
     setName("");
     setPhone("");
   };
