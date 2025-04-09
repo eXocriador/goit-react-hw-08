@@ -1,4 +1,3 @@
-// src/layout/Layout.jsx
 import { Outlet } from "react-router-dom";
 import AppBar from "../components/AppBar/AppBar";
 
@@ -12,5 +11,4 @@ const Layout = () => {
     </>
   );
 };
-
 export default Layout;
