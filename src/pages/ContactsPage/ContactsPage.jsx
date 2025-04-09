@@ -21,10 +21,10 @@ const ContactsPage = () => {
   return (
     <div>
       <h2>Your Contacts</h2>
-      <ContactForm /> {/* ✅ ДОДАНО — завжди показується для створення */}
+      <ContactForm />
       <Filter />
       <ContactList onEdit={setEditingContact} />
-      {/* ✅ Модалка для редагування */}
+
       <Modal
         show={!!editingContact}
         title="Edit Contact"

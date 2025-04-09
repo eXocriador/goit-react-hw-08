@@ -88,7 +88,7 @@ const ContactForm = ({ editing = null, setEditing = () => {} }) => {
         <Field name="number" placeholder="+123456789" />
 
         <button type="submit">
-          {editing ? "Update Contact" : "Add Contact"}
+          {editing ? "Edit Contact" : "Add Contact"}
         </button>
       </Form>
     </Formik>
