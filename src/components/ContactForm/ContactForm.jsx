@@ -9,10 +9,12 @@ const ContactForm = ({ editing = null, setEditing = () => {} }) => {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
 
+  const phoneRegExp = /^\+?[0-9\s\-()]{6,20}$/;
+
   const validationSchema = Yup.object({
     name: Yup.string().min(2, "Too short").required("Required"),
     number: Yup.string()
-      .matches(/^[+]?[\d\s-]*\d$/, "Invalid phone number")
+      .matches(phoneRegExp, "Invalid phone number")
       .required("Required"),
   });
 
@@ -67,18 +69,6 @@ const ContactForm = ({ editing = null, setEditing = () => {} }) => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
       validateOnChange={false}
-      validate={(values) => {
-        const errors = {};
-        try {
-          validationSchema.validateSync(values, { abortEarly: false });
-        } catch (err) {
-          err.inner.forEach((error) => {
-            toast.error(error.message, { position: "top-right" });
-            errors[error.path] = error.message;
-          });
-        }
-        return errors;
-      }}
     >
       <Form>
         <label>Name</label>
