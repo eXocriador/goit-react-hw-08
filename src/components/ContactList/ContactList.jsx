@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { deleteContact } from "../../redux/contacts/operations";
 import { selectFilteredContacts } from "../../redux/contacts/selectors";
-import ConfirmModal from "../ConfirmModal/ConfirmModal";
+import Modal from "../Modal/Modal";
 import { toast } from "react-hot-toast";
 
 const ContactList = ({ onEdit }) => {
@@ -42,7 +42,7 @@ const ContactList = ({ onEdit }) => {
         ))}
       </ul>
       {modalData && (
-        <ConfirmModal
+        <Modal
           message={`Delete ${modalData.name}?`}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}

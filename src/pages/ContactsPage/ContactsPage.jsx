@@ -5,7 +5,8 @@ import ContactList from "../../components/ContactList/ContactList";
 import Filter from "../../components/Filter/Filter";
 import { fetchContacts } from "../../redux/contacts/operations";
 import { selectIsLoggedIn } from "../../redux/auth/selectors";
-import styles from "../../components/ConfirmModal/ConfirmModal.module.css";
+import Modal from "../../components/Modal/Modal";
+import styles from "./ContactsPage.module.css";
 
 const ContactsPage = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,13 @@ const ContactsPage = () => {
 
   return (
     <div>
+      <Modal
+        show={!!editingContact}
+        title="Edit Contact"
+        onClose={() => setEditingContact(null)}
+      >
+        <ContactForm editing={editingContact} setEditing={setEditingContact} />
+      </Modal>
       <h2>Your Contacts</h2>
       <Filter />
       <ContactList onEdit={setEditingContact} />
