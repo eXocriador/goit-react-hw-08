@@ -1,11 +1,26 @@
-.link {
-  display: inline-block;
-  text-decoration: none;
-  padding: 12px;
-  font-weight: 700;
-  color: #2a363b;
+.navbar {
+  display: flex;
+  gap: 16px;
+  padding: 12px 24px;
+  background-color: #1e1e2f;
+  border-bottom: 2px solid #3f3f5f;
 }
 
-.link.active {
-  color: #e84a5f;
+.link {
+  color: #f0f0f0;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.link:hover {
+  background-color: #2d2d44;
+}
+
+.active {
+  background-color: #4a90e2;
+  color: white;
 }
