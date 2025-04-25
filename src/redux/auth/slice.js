@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { register, logIn, logOut, refreshUser } from './operations';
 
-const authSlice = createSlice({
+const slice = createSlice({
   name: 'auth',
   initialState: {
     user: {
@@ -43,4 +43,4 @@ const authSlice = createSlice({
   },
 });
 
-export const authReducer = authSlice.reducer;
+export const authReducer = slice.reducer;
