@@ -1,46 +1,52 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { register } from "../../redux/auth/operations";
+import styles from "./RegistrationForm.module.css";
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const validationSchema = Yup.object({
-    name: Yup.string().required("Required"),
-    email: Yup.string().email("Invalid email").required("Required"),
-    password: Yup.string()
-      .min(7, "Must be at least 7 characters")
-      .required("Required"),
-  });
-
-  const handleSubmit = (values, { resetForm }) => {
-    dispatch(register(values));
-    resetForm();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(register({ name, email, password }));
   };
 
   return (
-    <Formik
-      initialValues={{ name: "", email: "", password: "" }}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      <Form>
-        <label>Name:</label>
-        <Field type="text" name="name" />
-        <ErrorMessage name="name" component="div" />
-
-        <label>Email:</label>
-        <Field type="email" name="email" />
-        <ErrorMessage name="email" component="div" />
-
-        <label>Password:</label>
-        <Field type="password" name="password" />
-        <ErrorMessage name="password" component="div" />
-
-        <button type="submit">Register</button>
-      </Form>
-    </Formik>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <label className={styles.label}>
+        Name:
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className={styles.input}
+        />
+      </label>
+      <label className={styles.label}>
+        Email:
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className={styles.input}
+        />
+      </label>
+      <label className={styles.label}>
+        Password:
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className={styles.input}
+        />
+      </label>
+      <button type="submit" className={styles.button}>
+        Register
+      </button>
+    </form>
   );
 };
 

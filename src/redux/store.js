@@ -1,9 +1,9 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import authReducer from './auth/slice';
+import authSlice from './auth/slice';
 import contactsReducer from './contacts/slice';
-import filtersReducer from './filters/slice';
+import selectFilter from './filters/slice';
 
 const authPersistConfig = {
   key: 'auth',
@@ -12,9 +12,9 @@ const authPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  auth: persistReducer(authPersistConfig, authReducer),
+  auth: persistReducer(authPersistConfig, authSlice),
   contacts: contactsReducer,
-  filters: filtersReducer,
+  filters: selectFilter,
 });
 
 export const store = configureStore({
