@@ -1,9 +1,20 @@
-.wrapper {
+.menu {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.username {
-  font-weight: 700;
+.email {
+  color: white;
+}
+
+.button {
+  background-color: #61dafb;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #21a1f1;
 }

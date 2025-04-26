@@ -4,7 +4,7 @@ import styles from "./Layout.module.css";
 
 const Layout = () => {
   return (
-    <div className={styles.container}>
+    <div>
       <AppBar />
       <main className={styles.main}>
         <Outlet />
