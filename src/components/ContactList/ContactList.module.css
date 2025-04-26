@@ -1,34 +1,69 @@
-.confirmButtons {
+.contactList {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
-.confirmButton {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
+.contactItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+}
+
+.contactName {
+  font-weight: 600;
+}
+
+.contactNumber {
   font-size: 14px;
+  color: #666;
+}
+
+.contactActions {
+  display: flex;
+  gap: 8px;
+}
+
+.editButton,
+.deleteButton {
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  transition: background-color 0.3s ease;
+  border-radius: 50%;
 }
 
-.confirmYes {
-  background-color: #ff4d4f;
-  color: white;
+.editButton:hover {
+  background-color: rgba(25, 118, 210, 0.1);
 }
 
-.confirmYes:hover {
-  background-color: #d9363e;
+.deleteButton:hover {
+  background-color: rgba(211, 47, 47, 0.1);
 }
 
-.confirmNo {
-  background-color: #eee;
-  color: #333;
-}
+@media (max-width: 600px) {
+  .contactItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 
-.confirmNo:hover {
-  background-color: #ddd;
+  .contactActions {
+    align-self: flex-end;
+  }
 }

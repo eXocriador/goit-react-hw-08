@@ -1,64 +1,54 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import { deleteContact } from "../../redux/contacts/operations";
-import { selectFilteredContacts } from "../../redux/contacts/selectors";
-import Modal from "../Modal/Modal";
+import PropTypes from "prop-types";
+import { List, ListItem, IconButton, Typography, Box } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import styles from "./ContactList.module.css";
 
-const ContactList = ({ onEdit }) => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(selectFilteredContacts);
-  const [modalData, setModalData] = useState(null);
-
-  const handleDeleteClick = (id, name) => {
-    setModalData({ id, name });
-  };
-
-  const confirmDelete = () => {
-    dispatch(deleteContact(modalData.id));
-    setModalData(null);
-  };
-
-  const cancelDelete = () => {
-    setModalData(null);
-  };
-
+const ContactList = ({ contacts, onDelete, onEdit }) => {
   return (
-    <>
-      <ul>
-        {contacts.map(({ id, name, number }) => (
-          <li key={id}>
-            {name}: {number}{" "}
-            <button onClick={() => onEdit({ id, name, number })}>Edit</button>
-            <button onClick={() => handleDeleteClick(id, name)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-
-      {modalData && (
-        <Modal
-          show={true}
-          onClose={cancelDelete}
-          title={`Delete "${modalData.name}"?`}
-        >
-          <div className={styles.confirmButtons}>
-            <button
-              className={`${styles.confirmButton} ${styles.confirmYes}`}
-              onClick={confirmDelete}
+    <List className={styles.list}>
+      {contacts.map((contact) => (
+        <ListItem key={contact.id} className={styles.item}>
+          <Box className={styles.infoBox}>
+            <Typography variant="subtitle1" className={styles.name}>
+              {contact.name}
+            </Typography>
+            <Typography variant="body2" className={styles.number}>
+              {contact.number}
+            </Typography>
+          </Box>
+          <Box className={styles.buttonsBox}>
+            <IconButton
+              aria-label="edit"
+              onClick={() => onEdit(contact)}
+              className={styles.iconButton}
             >
-              Yes
-            </button>
-            <button
-              className={`${styles.confirmButton} ${styles.confirmNo}`}
-              onClick={cancelDelete}
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              onClick={() => onDelete(contact.id)}
+              className={styles.iconButton}
             >
-              No
-            </button>
-          </div>
-        </Modal>
-      )}
-    </>
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        </ListItem>
+      ))}
+    </List>
   );
+};
+
+ContactList.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired
+    })
+  ).isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired
 };
 
 export default ContactList;
