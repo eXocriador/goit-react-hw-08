@@ -7,6 +7,9 @@ const Navigation = () => {
       <NavLink to="/" className={styles.link}>
         Home
       </NavLink>
+      <NavLink to="/contacts" className={styles.link}>
+        Contacts
+      </NavLink>
     </nav>
   );
 };

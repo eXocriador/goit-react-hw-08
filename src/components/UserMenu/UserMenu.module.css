@@ -1,18 +1,22 @@
 .menu {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .email {
   color: white;
+  font-size: 18px;
 }
 
 .button {
   background-color: #61dafb;
   border: none;
+  border-radius: 6px;
   padding: 8px 16px;
   cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .button:hover {

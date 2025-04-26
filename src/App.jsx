@@ -1,7 +1,11 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { refreshUser } from "./redux/auth/operations";
+import { selectIsRefreshing } from "./redux/auth/selectors";
 import { Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import RestrictedRoute from "./routes/RestrictedRoute";
 import PrivateRoute from "./routes/PrivateRoute";
+import RestrictedRoute from "./routes/RestrictedRoute";
 import Layout from "./components/Layout/Layout";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage.jsx"));
@@ -14,6 +18,21 @@ const ContactsPage = lazy(() =>
 );
 
 const App = () => {
+  const dispatch = useDispatch();
+  const isRefreshing = useSelector(selectIsRefreshing);
+
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
+
+  if (isRefreshing) {
+    return (
+      <p style={{ textAlign: "center", marginTop: "30px" }}>
+        Refreshing user...
+      </p>
+    );
+  }
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>

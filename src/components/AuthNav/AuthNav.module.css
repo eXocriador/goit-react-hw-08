@@ -1,13 +1,15 @@
 .nav {
   display: flex;
-  gap: 12px;
+  gap: 20px;
 }
 
 .link {
   color: white;
+  font-size: 18px;
   text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .link:hover {
-  text-decoration: underline;
+  color: #61dafb;
 }
