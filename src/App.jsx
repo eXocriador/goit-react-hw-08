@@ -24,13 +24,22 @@ const App = () => {
     <>
       <Toaster position="top-right" />
       {isRefreshing ? (
-        <p>Refreshing user...</p>
+        <div
+          style={{
+            minHeight: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <p>Refreshing user...</p>
+        </div>
       ) : (
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route
-              path="/register"
+              path="register"
               element={
                 <RestrictedRoute>
                   <RegistrationPage />
@@ -38,7 +47,7 @@ const App = () => {
               }
             />
             <Route
-              path="/login"
+              path="login"
               element={
                 <RestrictedRoute>
                   <LoginPage />
@@ -46,7 +55,7 @@ const App = () => {
               }
             />
             <Route
-              path="/contacts"
+              path="contacts"
               element={
                 <PrivateRoute>
                   <ContactsPage />

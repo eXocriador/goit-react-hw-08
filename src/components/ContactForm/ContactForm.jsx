@@ -1,87 +1,60 @@
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
 import { addContact, updateContact } from "../../redux/contacts/operations";
-import { selectContacts } from "../../redux/contacts/selectors";
-import { toast } from "react-hot-toast";
+import styles from "./ContactForm.module.css";
 
-const ContactForm = ({ editing = null, setEditing = () => {} }) => {
+const ContactForm = ({ editing, setEditing }) => {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
 
-  const phoneRegExp = /^\+?[0-9\s\-()]{6,20}$/;
+  useEffect(() => {
+    if (editing) {
+      setName(editing.name);
+      setNumber(editing.number);
+    }
+  }, [editing]);
 
-  const validationSchema = Yup.object({
-    name: Yup.string().min(2, "Too short").required("Required"),
-    number: Yup.string()
-      .matches(phoneRegExp, "Invalid phone number")
-      .required("Required"),
-  });
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const handleSubmit = (values, { resetForm, setSubmitting }) => {
-    const isDuplicate = contacts.some(
-      (contact) =>
-        contact.name.toLowerCase() === values.name.toLowerCase() &&
-        (!editing || contact.id !== editing.id)
-    );
-
-    if (isDuplicate) {
-      toast.error(`${values.name} is already in contacts`, {
-        position: "top-right",
-      });
-      setSubmitting(false);
-      return;
+    if (editing) {
+      dispatch(updateContact({ id: editing.id, name, number }));
+      setEditing(null);
+    } else {
+      dispatch(addContact({ name, number }));
     }
 
-    const action = editing
-      ? updateContact({ id: editing.id, ...values })
-      : addContact(values);
-
-    dispatch(action)
-      .unwrap()
-      .then(() => {
-        toast.success(
-          editing
-            ? `${values.name} updated successfully`
-            : `${values.name} added`,
-          { position: "top-right" }
-        );
-        resetForm();
-        setEditing(null);
-      })
-      .catch(() => {
-        toast.error(
-          editing ? "Failed to update contact" : "Failed to add contact",
-          { position: "top-right" }
-        );
-      });
-
-    setSubmitting(false);
+    setName("");
+    setNumber("");
   };
 
   return (
-    <Formik
-      enableReinitialize
-      initialValues={{
-        name: editing?.name || "",
-        number: editing?.number || "",
-      }}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-      validateOnChange={false}
-    >
-      <Form>
-        <label>Name</label>
-        <Field name="name" placeholder="John Doe" />
-
-        <label>Number</label>
-        <Field name="number" placeholder="+123456789" />
-
-        <button type="submit">
-          {editing ? "Edit Contact" : "Add Contact"}
-        </button>
-      </Form>
-    </Formik>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <label className={styles.label}>
+        Name:
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className={styles.input}
+        />
+      </label>
+      <label className={styles.label}>
+        Number:
+        <input
+          type="text"
+          value={number}
+          onChange={(e) => setNumber(e.target.value)}
+          required
+          className={styles.input}
+        />
+      </label>
+      <button type="submit" className={styles.button}>
+        {editing ? "Update Contact" : "Add Contact"}
+      </button>
+    </form>
   );
 };
 
