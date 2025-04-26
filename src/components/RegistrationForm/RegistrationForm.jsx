@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { register } from "../../redux/auth/operations";
 import styles from "./RegistrationForm.module.css";
+import { toast } from "react-hot-toast";
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
@@ -9,9 +10,14 @@ const RegistrationForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(register({ name, email, password }));
+  const handleSubmit = async (values, { resetForm }) => {
+    try {
+      await dispatch(register(values)).unwrap();
+      toast.success("Реєстрація успішна!");
+      resetForm();
+    } catch (error) {
+      toast.error("Користувач з таким email вже існує.");
+    }
   };
 
   return (

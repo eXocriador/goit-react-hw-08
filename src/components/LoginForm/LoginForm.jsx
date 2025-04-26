@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../redux/auth/operations";
 import styles from "./LoginForm.module.css";
+import { toast } from "react-hot-toast";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -14,9 +15,14 @@ const LoginForm = () => {
       .required("Required")
   });
 
-  const handleSubmit = (values, { resetForm }) => {
-    dispatch(logIn(values));
-    resetForm();
+  const handleSubmit = async (values, { resetForm }) => {
+    try {
+      await dispatch(logIn(values)).unwrap();
+      toast.success("Вхід успішний!");
+      resetForm();
+    } catch (error) {
+      toast.error("Помилка входу. Перевір email або пароль.");
+    }
   };
 
   return (

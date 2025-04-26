@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { selectIsLoggedIn, selectIsRefreshing } from "../redux/auth/selectors";
 import { CircularProgress, Box } from "@mui/material";
 
-const PrivateRoute = ({ children, redirectTo = "/" }) => {
+const PrivateRoute = ({ component: Component, redirectTo = "/" }) => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const isRefreshing = useSelector(selectIsRefreshing);
 
@@ -22,7 +22,7 @@ const PrivateRoute = ({ children, redirectTo = "/" }) => {
     );
   }
 
-  return isLoggedIn ? children : <Navigate to={redirectTo} />;
+  return isLoggedIn ? Component : <Navigate to={redirectTo} />;
 };
 
 export default PrivateRoute;
