@@ -1,26 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import {
   addContact,
   deleteContact,
   fetchContacts
 } from "../../redux/contacts/operations";
 import {
-  selectContacts,
   selectFilteredContacts,
   selectIsLoading
 } from "../../redux/contacts/selectors";
-import { useEffect } from "react";
 import ContactForm from "../../components/ContactForm/ContactForm";
 import ContactList from "../../components/ContactList/ContactList";
 import SearchBox from "../../components/SearchBox/SearchBox";
-import Loader from "../../components/Loader/Loader";
+import { CircularProgress } from "@mui/material";
 import styles from "./ContactsPage.module.css";
 
 const ContactsPage = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
-  const filteredContacts = useSelector(selectFilteredContacts);
   const isLoading = useSelector(selectIsLoading);
+  const contacts = useSelector(selectFilteredContacts);
 
   useEffect(() => {
     dispatch(fetchContacts());
@@ -36,25 +34,29 @@ const ContactsPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.pageTitle}>Contacts</h1>
+      <h1 className={styles.title}>Contacts</h1>
 
-      <div className={styles.addContactSection}>
-        <h2 className={styles.sectionTitle}>Add Contact</h2>
+      <div className={styles.formWrapper}>
         <ContactForm onSubmit={handleAddContact} />
       </div>
 
-      <div className={styles.listSection}>
+      <div className={styles.searchWrapper}>
         <SearchBox />
-
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <ContactList
-            contacts={filteredContacts.length > 0 ? filteredContacts : contacts}
-            onDelete={handleDeleteContact}
-          />
-        )}
       </div>
+
+      {isLoading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "30px"
+          }}
+        >
+          <CircularProgress />
+        </div>
+      ) : (
+        <ContactList contacts={contacts} onDelete={handleDeleteContact} />
+      )}
     </div>
   );
 };
