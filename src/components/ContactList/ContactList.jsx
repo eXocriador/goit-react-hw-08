@@ -1,5 +1,9 @@
 import PropTypes from "prop-types";
-import { List, ListItem, IconButton, Typography, Box } from "@mui/material";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import styles from "./ContactList.module.css";
@@ -7,30 +11,24 @@ import styles from "./ContactList.module.css";
 const ContactList = ({ contacts, onDelete, onEdit }) => {
   return (
     <List className={styles.list}>
-      {contacts.map((contact) => (
-        <ListItem key={contact.id} className={styles.item}>
-          <Box className={styles.infoBox}>
-            <Typography variant="subtitle1" className={styles.name}>
-              {contact.name}
-            </Typography>
-            <Typography variant="body2" className={styles.number}>
-              {contact.number}
-            </Typography>
+      {contacts.map(({ id, name, number }) => (
+        <ListItem key={id} className={styles.contactItem}>
+          <Box className={styles.contactText}>
+            <Typography className={styles.contactName}>{name}</Typography>
+            <Typography className={styles.contactNumber}>{number}</Typography>
           </Box>
-          <Box className={styles.buttonsBox}>
+          <Box className={styles.contactActions}>
             <IconButton
-              aria-label="edit"
-              onClick={() => onEdit(contact)}
-              className={styles.iconButton}
+              className={styles.editButton}
+              onClick={() => onEdit(id)}
             >
-              <EditIcon />
+              <EditIcon fontSize="small" />
             </IconButton>
             <IconButton
-              aria-label="delete"
-              onClick={() => onDelete(contact.id)}
-              className={styles.iconButton}
+              className={styles.deleteButton}
+              onClick={() => onDelete(id)}
             >
-              <DeleteIcon />
+              <DeleteIcon fontSize="small" />
             </IconButton>
           </Box>
         </ListItem>

@@ -1,23 +1,34 @@
-.item {
+.contactItem {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 12px;
+  align-items: center;
+  padding: 10px 0;
   border-bottom: 1px solid #e0e0e0;
 }
 
-.name {
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.contactName {
   font-weight: 600;
 }
 
-.number {
-  margin-left: 16px;
+.contactNumber {
   font-size: 0.9rem;
-  color: #555;
-  flex-grow: 1;
+  color: #666;
 }
 
-.actions {
+.contactActions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
+}
+
+.editButton {
+  color: #1976d2;
+}
+
+.deleteButton {
+  color: #d32f2f;
 }

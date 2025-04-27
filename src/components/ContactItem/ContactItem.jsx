@@ -1,20 +1,29 @@
 import PropTypes from "prop-types";
-import styles from "./ContactItem.module.css";
 import { IconButton } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import { Edit, Delete } from "@mui/icons-material";
+import styles from "./ContactItem.module.css";
 
-const ContactItem = ({ contact, onDelete, onEdit }) => {
+const ContactItem = ({ id, name, number, onEdit, onDelete }) => {
   return (
-    <li className={styles.item}>
-      <span className={styles.name}>{contact.name}</span>
-      <span className={styles.number}>{contact.number}</span>
-      <div className={styles.actions}>
-        <IconButton color="primary" onClick={() => onEdit(contact)}>
-          <EditIcon />
+    <li className={styles.contactItem}>
+      <div className={styles.contactInfo}>
+        <p className={styles.contactName}>{name}</p>
+        <p className={styles.contactNumber}>{number}</p>
+      </div>
+      <div className={styles.contactActions}>
+        <IconButton
+          className={styles.editButton}
+          size="small"
+          onClick={() => onEdit(id)}
+        >
+          <Edit fontSize="small" />
         </IconButton>
-        <IconButton color="error" onClick={() => onDelete(contact.id)}>
-          <DeleteIcon />
+        <IconButton
+          className={styles.deleteButton}
+          size="small"
+          onClick={() => onDelete(id)}
+        >
+          <Delete fontSize="small" />
         </IconButton>
       </div>
     </li>
@@ -22,13 +31,11 @@ const ContactItem = ({ contact, onDelete, onEdit }) => {
 };
 
 ContactItem.propTypes = {
-  contact: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    number: PropTypes.string.isRequired
-  }).isRequired,
-  onDelete: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
 };
 
 export default ContactItem;

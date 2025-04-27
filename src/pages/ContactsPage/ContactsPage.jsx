@@ -32,6 +32,10 @@ const ContactsPage = () => {
     dispatch(deleteContact(id));
   };
 
+  const handleEditContact = (id) => {
+    console.log("Editing contact with id:", id);
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Contacts</h1>
@@ -55,7 +59,11 @@ const ContactsPage = () => {
           <CircularProgress />
         </div>
       ) : (
-        <ContactList contacts={contacts} onDelete={handleDeleteContact} />
+        <ContactList
+          contacts={contacts}
+          onDelete={handleDeleteContact}
+          onEdit={handleEditContact}
+        />
       )}
     </div>
   );
