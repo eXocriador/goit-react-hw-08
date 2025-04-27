@@ -36,19 +36,17 @@ const ContactsPage = () => {
     dispatch(addContact(data));
   };
 
-  const handleEditContact = (contact) => {
-    setCurrentContact(contact);
-    setIsEditModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setCurrentContact(null);
-    setIsEditModalOpen(false);
+  const handleEditContact = (id) => {
+    const contact = contacts.find((c) => c.id === id);
+    if (contact) {
+      setCurrentContact(contact);
+      setIsEditModalOpen(true);
+    }
   };
 
   const handleSaveEditedContact = (updatedContact) => {
     dispatch(updateContact(updatedContact));
-    handleCloseEditModal();
+    setIsEditModalOpen(false);
   };
 
   const handleDeleteContact = (id) => {
@@ -63,6 +61,11 @@ const ContactsPage = () => {
 
   const handleCancelDelete = () => {
     setIsConfirmModalOpen(false);
+  };
+
+  const handleCloseEditModal = () => {
+    setCurrentContact(null);
+    setIsEditModalOpen(false);
   };
 
   return (

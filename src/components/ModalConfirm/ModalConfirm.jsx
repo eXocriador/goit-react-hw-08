@@ -1,44 +1,22 @@
-import PropTypes from "prop-types";
-import { Modal as MuiModal, Box, Typography, Button } from "@mui/material";
+import { Modal, Box, Button } from "@mui/material";
 import styles from "./ModalConfirm.module.css";
 
-const ModalConfirm = ({ open, onClose, onConfirm, contactName }) => {
+const ModalConfirm = ({ open, onClose, onConfirm }) => {
   return (
-    <MuiModal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose}>
       <Box className={styles.modal}>
-        <Typography variant="h6" className={styles.title}>
-          Confirm Deletion
-        </Typography>
-        <Typography className={styles.text}>
-          Are you sure you want to delete <strong>{contactName}</strong>?
-        </Typography>
-        <Box className={styles.actions}>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={onConfirm}
-            className={styles.button}
-          >
+        <h2>Confirm deletion</h2>
+        <div className={styles.buttonGroup}>
+          <Button variant="contained" color="error" onClick={onConfirm}>
             Delete
           </Button>
-          <Button
-            variant="outlined"
-            onClick={onClose}
-            className={styles.button}
-          >
+          <Button variant="outlined" onClick={onClose}>
             Cancel
           </Button>
-        </Box>
+        </div>
       </Box>
-    </MuiModal>
+    </Modal>
   );
-};
-
-ModalConfirm.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onConfirm: PropTypes.func.isRequired,
-  contactName: PropTypes.string
 };
 
 export default ModalConfirm;

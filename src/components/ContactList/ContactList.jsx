@@ -1,35 +1,40 @@
 import PropTypes from "prop-types";
-import List from "@mui/material/List";
-
+import { List, ListItem, IconButton, Typography, Box } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import styles from "./ContactList.module.css";
 
 const ContactList = ({ contacts, onDelete, onEdit }) => {
   return (
     <List className={styles.list}>
       {contacts.map(({ id, name, number }) => (
-        <li key={id}>
-          <div>{name}</div>
-          <div>{number}</div>
-          <button type="button" onClick={() => onEdit({ id, name, number })}>
-            ✏️
-          </button>
-          <button type="button" onClick={() => onDelete(id)}>
-            🗑️
-          </button>
-        </li>
+        <ListItem key={id} className={styles.contactItem}>
+          <Box className={styles.contactActions}>
+            <IconButton
+              type="button"
+              onClick={() => onEdit(id)}
+              className={styles.editButton}
+            >
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton
+              type="button"
+              onClick={() => onDelete(id)}
+              className={styles.deleteButton}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </Box>
+          <Typography className={styles.contactName}>{name}</Typography>
+          <Typography className={styles.contactNumber}>{number}</Typography>
+        </ListItem>
       ))}
     </List>
   );
 };
 
 ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired
-    })
-  ).isRequired,
+  contacts: PropTypes.array.isRequired,
   onDelete: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired
 };

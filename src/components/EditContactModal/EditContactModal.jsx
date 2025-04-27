@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Modal, Box, TextField, Button } from "@mui/material";
+import { Modal, Box, Button, TextField } from "@mui/material";
+import styles from "./EditContactModal.module.css";
 
 const EditContactModal = ({ open, handleClose, contact, onSave }) => {
   const [name, setName] = useState("");
@@ -14,33 +15,24 @@ const EditContactModal = ({ open, handleClose, contact, onSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!contact || !contact.id) return; // перевіряємо чи є id
+
     onSave({ id: contact.id, name, number });
+    handleClose(); // закриваємо модалку після збереження
   };
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 300,
-          bgcolor: "background.paper",
-          p: 4,
-          borderRadius: 2,
-          boxShadow: 24
-        }}
-      >
-        <form onSubmit={handleSubmit}>
-          <h2>Edit Contact</h2>
+      <Box className={styles.modal}>
+        <h2>Edit Contact</h2>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <TextField
             fullWidth
             margin="normal"
             label="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
           />
           <TextField
             fullWidth
@@ -48,16 +40,15 @@ const EditContactModal = ({ open, handleClose, contact, onSave }) => {
             label="Phone Number"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
-            required
           />
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-            <Button variant="contained" color="error" onClick={handleClose}>
+          <div className={styles.buttonGroup}>
+            <Button variant="outlined" color="error" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="contained" color="primary" type="submit">
+            <Button variant="contained" type="submit">
               Save
             </Button>
-          </Box>
+          </div>
         </form>
       </Box>
     </Modal>
