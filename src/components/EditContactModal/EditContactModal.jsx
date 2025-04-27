@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { editContact } from "../../redux/contacts/operations";
+import { updateContact } from "../../redux/contacts/operations";
 import css from "./EditContactModal.module.css";
 
 const EditContactModal = ({ contact, onClose }) => {
@@ -10,7 +10,7 @@ const EditContactModal = ({ contact, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(editContact({ id: contact.id, name, number }));
+    dispatch(updateContact({ id: contact.id, name, number }));
     onClose();
   };
 
