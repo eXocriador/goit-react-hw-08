@@ -1,8 +1,9 @@
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import {
   addContact,
   deleteContact,
+  updateContact,
   fetchContacts
 } from "../../redux/contacts/operations";
 import {
@@ -12,6 +13,8 @@ import {
 import ContactForm from "../../components/ContactForm/ContactForm";
 import ContactList from "../../components/ContactList/ContactList";
 import SearchBox from "../../components/SearchBox/SearchBox";
+import EditContactModal from "../../components/EditContactModal/EditContactModal";
+import ModalConfirm from "../../components/ModalConfirm/ModalConfirm";
 import { CircularProgress } from "@mui/material";
 import styles from "./ContactsPage.module.css";
 
@@ -19,6 +22,11 @@ const ContactsPage = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
   const contacts = useSelector(selectFilteredContacts);
+
+  const [currentContact, setCurrentContact] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [contactToDelete, setContactToDelete] = useState(null);
 
   useEffect(() => {
     dispatch(fetchContacts());
@@ -28,12 +36,33 @@ const ContactsPage = () => {
     dispatch(addContact(data));
   };
 
-  const handleDeleteContact = (id) => {
-    dispatch(deleteContact(id));
+  const handleEditContact = (contact) => {
+    setCurrentContact(contact);
+    setIsEditModalOpen(true);
   };
 
-  const handleEditContact = (id) => {
-    console.log("Editing contact with id:", id);
+  const handleCloseEditModal = () => {
+    setCurrentContact(null);
+    setIsEditModalOpen(false);
+  };
+
+  const handleSaveEditedContact = (updatedContact) => {
+    dispatch(updateContact(updatedContact));
+    handleCloseEditModal();
+  };
+
+  const handleDeleteContact = (id) => {
+    setContactToDelete(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    dispatch(deleteContact(contactToDelete));
+    setIsConfirmModalOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setIsConfirmModalOpen(false);
   };
 
   return (
@@ -49,13 +78,7 @@ const ContactsPage = () => {
       </div>
 
       {isLoading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "30px"
-          }}
-        >
+        <div className={styles.loaderWrapper}>
           <CircularProgress />
         </div>
       ) : (
@@ -63,6 +86,23 @@ const ContactsPage = () => {
           contacts={contacts}
           onDelete={handleDeleteContact}
           onEdit={handleEditContact}
+        />
+      )}
+
+      {isEditModalOpen && (
+        <EditContactModal
+          open={isEditModalOpen}
+          handleClose={handleCloseEditModal}
+          contact={currentContact}
+          onSave={handleSaveEditedContact}
+        />
+      )}
+
+      {isConfirmModalOpen && (
+        <ModalConfirm
+          open={isConfirmModalOpen}
+          onClose={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
         />
       )}
     </div>
