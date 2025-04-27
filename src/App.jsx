@@ -1,40 +1,32 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { refreshUser } from "./redux/auth/operations";
-import { selectIsRefreshing } from "./redux/auth/selectors";
 import { Route, Routes } from "react-router-dom";
-import { lazy, Suspense } from "react";
-import PrivateRoute from "./routes/PrivateRoute";
-import RestrictedRoute from "./routes/RestrictedRoute";
-import Layout from "./components/Layout/Layout";
+import { lazy, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { refreshUser } from "./redux/auth/operations";
+import { useAuth } from "./hooks/useAuth";
+import { Layout } from "./Layout/Layout";
+import PrivateRoute from "./components/PrivateRoute";
+import RestrictedRoute from "./components/RestrictedRoute";
+import { Toaster } from "react-hot-toast";
 
-const HomePage = lazy(() => import("./pages/HomePage/HomePage.jsx"));
-const RegisterPage = lazy(() =>
-  import("./pages/RegisterPage/RegisterPage.jsx")
+const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
+const ContactsPage = lazy(() => import("./pages/ContactsPage/ContactsPage"));
+const RegistrationPage = lazy(() =>
+  import("./pages/RegistrationPage/RegistrationPage")
 );
-const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage.jsx"));
-const ContactsPage = lazy(() =>
-  import("./pages/ContactsPage/ContactsPage.jsx")
-);
+const LoginPage = lazy(() => import("./pages/LoginPage/LoginPage"));
 
 const App = () => {
   const dispatch = useDispatch();
-  const isRefreshing = useSelector(selectIsRefreshing);
+  const { isRefreshing } = useAuth();
 
   useEffect(() => {
     dispatch(refreshUser());
   }, [dispatch]);
 
-  if (isRefreshing) {
-    return (
-      <p style={{ textAlign: "center", marginTop: "30px" }}>
-        Refreshing user...
-      </p>
-    );
-  }
-
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
+  return isRefreshing ? (
+    <p>Refreshing user...</p>
+  ) : (
+    <>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
@@ -42,7 +34,7 @@ const App = () => {
             path="/register"
             element={
               <RestrictedRoute
-                element={<RegisterPage />}
+                component={<RegistrationPage />}
                 redirectTo="/contacts"
               />
             }
@@ -50,18 +42,22 @@ const App = () => {
           <Route
             path="/login"
             element={
-              <RestrictedRoute element={<LoginPage />} redirectTo="/contacts" />
+              <RestrictedRoute
+                component={<LoginPage />}
+                redirectTo="/contacts"
+              />
             }
           />
           <Route
             path="/contacts"
             element={
-              <PrivateRoute element={<ContactsPage />} redirectTo="/login" />
+              <PrivateRoute component={<ContactsPage />} redirectTo="/login" />
             }
           />
         </Route>
       </Routes>
-    </Suspense>
+      <Toaster position="top-right" />
+    </>
   );
 };
 

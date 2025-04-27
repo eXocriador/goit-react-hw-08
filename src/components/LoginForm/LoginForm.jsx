@@ -1,56 +1,47 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { logIn } from "../../redux/auth/operations";
-import styles from "./LoginForm.module.css";
-import { toast } from "react-hot-toast";
+import { Formik, Form, Field } from "formik";
+import * as yup from "yup";
+import { login } from "../../redux/auth/operations";
+import css from "./LoginForm.module.css";
+
+const schema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Required"),
+  password: yup.string().min(6, "Too short").required("Required")
+});
+
+const initialValues = {
+  email: "",
+  password: ""
+};
 
 const LoginForm = () => {
   const dispatch = useDispatch();
 
-  const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email").required("Required"),
-    password: Yup.string()
-      .min(7, "Must be at least 7 characters")
-      .required("Required")
-  });
-
-  const handleSubmit = async (values, { resetForm }) => {
-    try {
-      await dispatch(logIn(values)).unwrap();
-      toast.success("Вхід успішний!");
-      resetForm();
-    } catch (error) {
-      toast.error("Помилка входу. Перевір email або пароль.");
-    }
+  const handleSubmit = (values, { resetForm }) => {
+    dispatch(login(values));
+    resetForm();
   };
 
   return (
-    <div className={styles.container}>
-      <Formik
-        initialValues={{ email: "", password: "" }}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        <Form className={styles.form}>
-          <label className={styles.label}>
-            Email:
-            <Field type="email" name="email" className={styles.input} />
-            <ErrorMessage name="email" component="div" />
-          </label>
-
-          <label className={styles.label}>
-            Password:
-            <Field type="password" name="password" className={styles.input} />
-            <ErrorMessage name="password" component="div" />
-          </label>
-
-          <button type="submit" className={styles.button}>
-            Login
-          </button>
-        </Form>
-      </Formik>
-    </div>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={schema}
+      onSubmit={handleSubmit}
+    >
+      <Form className={css.form}>
+        <label className={css.label}>
+          Email
+          <Field className={css.input} type="email" name="email" />
+        </label>
+        <label className={css.label}>
+          Password
+          <Field className={css.input} type="password" name="password" />
+        </label>
+        <button className={css.button} type="submit">
+          Log In
+        </button>
+      </Form>
+    </Formik>
   );
 };
 

@@ -1,24 +1,17 @@
-.menu {
+.wrapper {
   display: flex;
   align-items: center;
-  gap: 16px;
 }
 
-.email {
-  color: white;
-  font-size: 18px;
+.username {
+  margin-right: 15px;
 }
 
 .button {
-  background-color: #61dafb;
+  padding: 5px 10px;
   border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
+  background-color: #f44336;
+  color: white;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.button:hover {
-  background-color: #21a1f1;
 }

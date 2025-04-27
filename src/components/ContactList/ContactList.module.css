@@ -1,41 +1,5 @@
 .list {
-  width: 100%;
-  padding: 0;
-}
-
-.contactItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 12px 0;
-}
-
-.contactText {
   display: flex;
   flex-direction: column;
-}
-
-.contactName {
-  font-weight: bold;
-}
-
-.contactNumber {
-  font-size: 0.9rem;
-  color: #555;
-}
-
-.contactActions {
-  display: flex;
   gap: 8px;
-}
-
-.editButton,
-.deleteButton {
-  color: #1976d2;
-}
-
-.editButton:hover,
-.deleteButton:hover {
-  color: #1565c0;
 }

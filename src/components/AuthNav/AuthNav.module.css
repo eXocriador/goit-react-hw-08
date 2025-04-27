@@ -1,15 +1,9 @@
-.nav {
-  display: flex;
-  gap: 20px;
-}
-
 .link {
+  margin-right: 20px;
   color: white;
-  font-size: 18px;
-  text-decoration: none;
-  transition: color 0.3s ease;
+  font-weight: 600;
 }
 
-.link:hover {
-  color: #61dafb;
+.link.active {
+  text-decoration: underline;
 }

@@ -1,41 +1,51 @@
-import PropTypes from "prop-types";
-import { IconButton } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
-import styles from "./ContactItem.module.css";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteContact } from "../../redux/contacts/operations";
+import EditContactModal from "../EditContactModal/EditContactModal";
+import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import css from "./ContactItem.module.css";
 
-const ContactItem = ({ id, name, number, onEdit, onDelete }) => {
+const ContactItem = ({ contact }) => {
+  const dispatch = useDispatch();
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const handleDelete = () => {
+    dispatch(deleteContact(contact.id));
+  };
+
   return (
-    <li className={styles.contactItem}>
-      <div className={styles.contactInfo}>
-        <p className={styles.contactName}>{name}</p>
-        <p className={styles.contactNumber}>{number}</p>
-      </div>
-      <div className={styles.contactActions}>
-        <IconButton
-          className={styles.editButton}
-          size="small"
-          onClick={() => onEdit(id)}
-        >
-          <Edit fontSize="small" />
-        </IconButton>
-        <IconButton
-          className={styles.deleteButton}
-          size="small"
-          onClick={() => onDelete(id)}
-        >
-          <Delete fontSize="small" />
-        </IconButton>
-      </div>
-    </li>
+    <>
+      <li className={css.item}>
+        <span>
+          {contact.name}: {contact.number}
+        </span>
+        <div>
+          <button className={css.button} onClick={() => setIsEditOpen(true)}>
+            Edit
+          </button>
+          <button
+            className={css.buttonDelete}
+            onClick={() => setIsConfirmOpen(true)}
+          >
+            Delete
+          </button>
+        </div>
+      </li>
+      {isEditOpen && (
+        <EditContactModal
+          contact={contact}
+          onClose={() => setIsEditOpen(false)}
+        />
+      )}
+      {isConfirmOpen && (
+        <ConfirmDeleteModal
+          onConfirm={handleDelete}
+          onCancel={() => setIsConfirmOpen(false)}
+        />
+      )}
+    </>
   );
-};
-
-ContactItem.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
 };
 
 export default ContactItem;

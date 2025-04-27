@@ -1,81 +1,48 @@
-import PropTypes from "prop-types";
-import { Box, Button, TextField, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
-import styles from "./ContactForm.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { addContact } from "../../redux/contacts/operations";
+import { selectContacts } from "../../redux/contacts/selectors";
+import css from "./ContactForm.module.css";
+import toast from "react-hot-toast";
 
-const ContactForm = ({ onSubmit, initialValues }) => {
-  const [values, setValues] = useState(() => ({
-    name: initialValues?.name || "",
-    number: initialValues?.number || "",
-    id: initialValues?.id || undefined
-  }));
-
-  useEffect(() => {
-    if (initialValues?.id !== values.id) {
-      setValues({
-        name: initialValues?.name || "",
-        number: initialValues?.number || "",
-        id: initialValues?.id || undefined
-      });
-    }
-  }, [initialValues?.id]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues((prev) => ({ ...prev, [name]: value }));
-  };
+const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(values);
+    const form = e.target;
+    const name = form.elements.name.value.trim();
+    const number = form.elements.number.value.trim();
 
-    if (!values.id) {
-      setValues({ name: "", number: "", id: undefined });
+    const isDuplicate = contacts.some(
+      (contact) => contact.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (isDuplicate) {
+      toast.error(`${name} is already in contacts.`);
+      form.reset();
+      return;
     }
+
+    dispatch(addContact({ name, number }));
+    form.reset();
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} className={styles.form}>
-      <Typography variant="h6" component="h2" className={styles.title}>
-        {values.id ? "Edit Contact" : "Add Contact"}
-      </Typography>
-      <TextField
-        label="Name"
-        name="name"
-        value={values.name}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-        required
-      />
-      <TextField
-        label="Phone Number"
-        name="number"
-        value={values.number}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-        required
-      />
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        className={styles.button}
-      >
-        {values.id ? "Update Contact" : "Add Contact"}
-      </Button>
-    </Box>
+    <form className={css.form} onSubmit={handleSubmit}>
+      <label className={css.label}>
+        Name
+        <input className={css.input} type="text" name="name" required />
+      </label>
+      <label className={css.label}>
+        Number
+        <input className={css.input} type="tel" name="number" required />
+      </label>
+      <button className={css.button} type="submit">
+        Add contact
+      </button>
+    </form>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.shape({
-    name: PropTypes.string,
-    number: PropTypes.string,
-    id: PropTypes.string
-  })
 };
 
 export default ContactForm;

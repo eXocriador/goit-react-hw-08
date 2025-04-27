@@ -1,57 +1,49 @@
-import { useState, useEffect } from "react";
-import { Modal, Box, Button, TextField } from "@mui/material";
-import styles from "./EditContactModal.module.css";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { editContact } from "../../redux/contacts/operations";
+import css from "./EditContactModal.module.css";
 
-const EditContactModal = ({ open, handleClose, contact, onSave }) => {
-  const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
-
-  useEffect(() => {
-    if (contact) {
-      setName(contact.name || "");
-      setNumber(contact.number || "");
-    }
-  }, [contact]);
+const EditContactModal = ({ contact, onClose }) => {
+  const dispatch = useDispatch();
+  const [name, setName] = useState(contact.name);
+  const [number, setNumber] = useState(contact.number);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!contact || !contact.id) return; // перевіряємо чи є id
-
-    onSave({ id: contact.id, name, number });
-    handleClose(); // закриваємо модалку після збереження
+    dispatch(editContact({ id: contact.id, name, number }));
+    onClose();
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Box className={styles.modal}>
-        <h2>Edit Contact</h2>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Name"
+    <div className={css.backdrop}>
+      <div className={css.modal}>
+        <h3>Edit Contact</h3>
+        <form onSubmit={handleSubmit}>
+          <input
+            className={css.input}
+            type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
           />
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Phone Number"
+          <input
+            className={css.input}
+            type="tel"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
+            required
           />
-          <div className={styles.buttonGroup}>
-            <Button variant="outlined" color="error" onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button variant="contained" type="submit">
+          <div className={css.actions}>
+            <button className={css.button} type="submit">
               Save
-            </Button>
+            </button>
+            <button className={css.button} type="button" onClick={onClose}>
+              Cancel
+            </button>
           </div>
         </form>
-      </Box>
-    </Modal>
+      </div>
+    </div>
   );
 };
 
